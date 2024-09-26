@@ -1,0 +1,36 @@
+services:
+  app:
+    image: 'jc21/nginx-proxy-manager:latest'
+    restart: unless-stopped
+    environment:
+      DISABLE_IPV6: 'true' # If IPv6 is not enabled on your host
+    volumes:
+      - data:/data
+      - letsencrypt:/etc/letsencrypt
+    ports:
+      - '80:80' # Public HTTP Port
+      - '443:443' # Public HTTPS Port
+      # - '81:81' # Admin Web Port (access with proxy)
+    networks:
+      - network
+      # other networks for reverse proxy
+      - adguardhome_network
+      - portainer_network
+      - speedtesttracker_network
+    healthcheck:
+      test: ["CMD", "/usr/bin/check-health"]
+      interval: 10s
+      timeout: 3s
+
+volumes:
+  data:
+  letsencrypt:
+  
+networks:
+  network:
+  adguardhome_network:
+    external: true
+  portainer_network:
+    external: true
+  speedtesttracker_network:
+    external: true
