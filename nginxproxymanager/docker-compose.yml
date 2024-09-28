@@ -17,6 +17,7 @@ services:
       - adguardhome_network
       - portainer_network
       - speedtesttracker_network
+      - uptimekuma_network
     healthcheck:
       test: ["CMD", "/usr/bin/check-health"]
       interval: 10s
@@ -33,4 +34,6 @@ networks:
   portainer_network:
     external: true
   speedtesttracker_network:
+    external: true
+  uptimekuma_network:
     external: true
