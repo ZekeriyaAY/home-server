@@ -1,0 +1,24 @@
+services:
+  jellyfin:
+    image: jellyfin/jellyfin:latest
+    container_name: jellyfin
+    restart: unless-stopped
+    network_mode: bridge
+    ports:
+      - 8096:8096
+    volumes:
+      - /opt/media/config/jellyfin:/config
+      - /opt/media/cache/jellyfin:/cache
+      - /opt/media/movies:/movies
+      - /opt/media/tv-shows:/tv-shows
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+    #environment:
+    #  - NVIDIA_VISIBLE_DEVICES=all  # NVIDIA GPU kullanıyorsanız
+    #  - NVIDIA_DRIVER_CAPABILITIES=all
+    #runtime: nvidia
