@@ -2,6 +2,10 @@ services:
   jellyfin:
     image: jellyfin/jellyfin:latest
     container_name: jellyfin
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Etc/UTC
     restart: unless-stopped
     network_mode: bridge
     ports:
@@ -11,14 +15,3 @@ services:
       - /opt/media/cache/jellyfin:/cache
       - /opt/media/movies:/movies
       - /opt/media/tv-shows:/tv-shows
-    deploy:
-      resources:
-        reservations:
-          devices:
-            - driver: nvidia
-              count: all
-              capabilities: [gpu]
-    #environment:
-    #  - NVIDIA_VISIBLE_DEVICES=all  # NVIDIA GPU kullanıyorsanız
-    #  - NVIDIA_DRIVER_CAPABILITIES=all
-    #runtime: nvidia
