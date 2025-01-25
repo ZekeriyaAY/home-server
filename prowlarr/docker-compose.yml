@@ -1,0 +1,11 @@
+services:
+  prowlarr:
+    image: lscr.io/linuxserver/prowlarr:latest
+    container_name: prowlarr
+    restart: unless-stopped
+    network_mode: bridge
+    ports:
+      - 9696:9696
+    volumes:
+      - /opt/media/config/prowlarr:/config
+      - /opt/media/downloads:/downloads
