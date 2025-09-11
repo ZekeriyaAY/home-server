@@ -21,12 +21,16 @@ services:
     ports:
       - 443:443
       - 80:80
+    networks:
+      - network
 
   initContainer:
     image: busybox
     command: ['sh', '-c', 'chown -R 1000:1000 /home/node/.n8n']
     volumes:
-      - data:/home/node/.n8n
+      - app_data:/home/node/.n8n
+    networks:
+      - network
 
   app:
     image: docker.n8n.io/n8nio/n8n
@@ -57,13 +61,18 @@ services:
       - GENERIC_TIMEZONE=${GENERIC_TIMEZONE}
       - TZ=${GENERIC_TIMEZONE}
     volumes:
-      - data:/home/node/.n8n
+      - app_data:/home/node/.n8n
     ports:
       - '127.0.0.1:5678:5678'
+    networks:
+      - network
     depends_on:
       initContainer:
         condition: service_completed_successfully
 
 volumes:
     traefik_data:
-    data:
+    app_data:
+
+networks:
+  network:
