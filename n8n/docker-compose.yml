@@ -11,6 +11,11 @@ services:
       - data:/home/node/.n8n
     ports:
       - 5678:5678
+    networks:
+      - network
 
 volumes:
   data:
+
+networks:
+  network:
