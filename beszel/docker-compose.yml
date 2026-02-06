@@ -1,0 +1,64 @@
+services:
+  beszel:
+    image: henrygd/beszel
+    container_name: beszel
+    restart: unless-stopped
+    ports:
+      - 8090:8090
+    volumes:
+      - app_data:/beszel_data
+      - app_socket:/beszel_socket
+    networks:
+      - network
+    environment:
+      APP_URL: http://${SERVER-IP}:8090
+    labels:
+      - glance.name=Beszel
+      - glance.icon=sh:beszel-light
+      - glance.url=http://${SERVER-IP}:8090
+      - glance.description=Server Monitoring Hub
+      - glance.id=beszel
+      - glance.category=default
+    healthcheck:
+      # The URL is relative to the container, not the host
+      test: ['CMD', '/beszel', 'health', '--url', 'http://localhost:8090']
+      start_period: 5s # Check 5 seconds after the container starts
+      interval: 120s # Then check every 120 seconds after that
+
+  beszel-agent:
+    image: henrygd/beszel-agent-nvidia
+    container_name: beszel-agent
+    restart: unless-stopped
+    network_mode: host
+    volumes:
+      - agent_data:/var/lib/beszel-agent
+      - app_socket:/beszel_socket
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    environment:
+      LISTEN: 45876
+      KEY: '${KEY}'
+      TOKEN: ${TOKEN}
+      HUB_URL: http://${SERVER-IP}:8090
+    labels:
+      - glance.name=Beszel Agent
+      - glance.parent=beszel
+      - glance.category=default
+    healthcheck:
+      test: ['CMD', '/agent', 'health']
+      interval: 120s
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities:
+                - utility
+
+volumes:
+    app_data:
+    app_socket:
+    agent_data:
+
+networks:
+  network:
