@@ -1,0 +1,24 @@
+services:
+  glance:
+    container_name: glance
+    image: glanceapp/glance
+    restart: unless-stopped
+    labels:
+      - glance.name=Glance
+      - glance.icon=di:glance
+      - glance.url=http://${SERVER-IP}:80
+      - glance.description=Dashboard
+      - glance.category=default
+    volumes:
+      - data:/app/config
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    ports:
+      - 80:8080
+    networks:
+      - network
+
+volumes:
+    data:
+
+networks:
+  network:
