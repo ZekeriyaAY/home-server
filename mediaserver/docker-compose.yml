@@ -1,0 +1,128 @@
+services:
+  transmission:
+    image: lscr.io/linuxserver/transmission:latest
+    container_name: transmission
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/Istanbul
+      - USER=${TRANSMISSION_USER:-admin}
+      - PASS=${TRANSMISSION_PASSWD:-admin}
+    volumes:
+      - /opt/mediaserver/config/transmission:/config
+      - /opt/mediaserver/data/torrents:/data/torrents
+    ports:
+      - 9091:9091
+      - 51413:51413
+      - 51413:51413/udp
+    restart: unless-stopped
+    labels:
+      - glance.name=Transmission
+      - glance.icon=si:transmission
+      - glance.url=http://${SERVER-IP}:9091
+      - glance.description=BitTorrent Client
+      - glance.category=media
+
+  jellyfin:
+    image: jellyfin/jellyfin:latest
+    container_name: jellyfin
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/Istanbul
+    volumes:
+      - /opt/mediaserver/config/jellyfin:/config
+      - /opt/mediaserver/cache/jellyfin:/cache
+      - /opt/mediaserver/data/media:/data/media
+    ports:
+      - 8096:8096
+    restart: unless-stopped
+    labels:
+      - glance.name=Jellyfin
+      - glance.icon=si:jellyfin
+      - glance.url=http://${SERVER-IP}:8096
+      - glance.description=Media Player
+      - glance.category=media
+
+  sonarr:
+    image: lscr.io/linuxserver/sonarr:latest
+    container_name: sonarr
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/Istanbul
+    volumes:
+      - /opt/mediaserver/config/sonarr:/config
+      - /opt/mediaserver/data:/data
+    ports:
+      - 8989:8989
+    restart: unless-stopped
+    labels:
+      - glance.name=Sonarr
+      - glance.icon=si:sonarr
+      - glance.url=http://${SERVER-IP}:8989
+      - glance.description=TV Shows Organizer/Manager
+      - glance.category=media
+
+  radarr:
+    image: lscr.io/linuxserver/radarr:latest
+    container_name: radarr
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/Istanbul
+    volumes:
+      - /opt/mediaserver/config/radarr:/config
+      - /opt/mediaserver/data:/data
+    ports:
+      - 7878:7878
+    restart: unless-stopped
+    labels:
+      - glance.name=Radarr
+      - glance.icon=si:radarr
+      - glance.url=http://${SERVER-IP}:7878
+      - glance.description=Movie Organizer/Manager
+      - glance.category=media
+
+  prowlarr:
+    image: lscr.io/linuxserver/prowlarr:latest
+    container_name: prowlarr
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/Istanbul
+    volumes:
+      - /opt/mediaserver/config/prowlarr:/config
+    ports:
+      - 9696:9696
+    restart: unless-stopped
+    labels:
+      - glance.name=Prowlarr
+      - glance.icon=sh:prowlarr-light
+      - glance.url=http://${SERVER-IP}:9696
+      - glance.description=Indexer Manager
+      - glance.category=media
+
+  bazarr:
+    image: lscr.io/linuxserver/bazarr:latest
+    container_name: bazarr
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/Istanbul
+    volumes:
+      - /opt/mediaserver/config/bazarr:/config
+      - /opt/mediaserver/data/media:/data/media
+    ports:
+      - 6767:6767
+    restart: unless-stopped
+    labels:
+      - glance.name=Bazarr
+      - glance.icon=sh:bazarr-light
+      - glance.url=http://${SERVER-IP}:6767
+      - glance.description=Subtitle Manager
+      - glance.category=media
+
+networks:
+  default:
+    name: media_network
