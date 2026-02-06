@@ -1,0 +1,52 @@
+services:
+  initContainer:
+    container_name: n8n-init
+    image: busybox
+    command: ['sh', '-c', 'chown -R 1000:1000 /home/node/.n8n']
+    volumes:
+      - app_data:/home/node/.n8n
+    networks:
+      - network
+    labels:
+      - glance.name=Init
+      - glance.parent=n8n
+      - glance.hide=true
+      - glance.category=default
+
+  n8n:
+    container_name: n8n
+    image: docker.n8n.io/n8nio/n8n
+    restart: unless-stopped
+    labels:
+      - glance.name=N8N
+      - glance.icon=si:n8n
+      - glance.url=https://{SUBDOMAIN}.${DOMAIN_NAME}
+      - glance.description=AI Workflow Automation
+      - glance.id=n8n
+      - glance.category=default
+    environment:
+      - N8N_ENFORCE_SETTINGS_FILE_PERMISSIONS=true
+      # - N8N_HOST=${SUBDOMAIN}.${DOMAIN_NAME}
+      # - N8N_PORT=5678
+      - N8N_PROTOCOL=https
+      - N8N_RUNNERS_ENABLED=true
+      # - NODE_ENV=production
+      - WEBHOOK_URL=https://${SUBDOMAIN}.${DOMAIN_NAME}/
+      - GENERIC_TIMEZONE=${GENERIC_TIMEZONE}
+      - TZ=${GENERIC_TIMEZONE}
+      - N8N_PROXY_HOPS=1
+    volumes:
+      - app_data:/home/node/.n8n
+    ports:
+      - 5678:5678
+    networks:
+      - network
+    depends_on:
+      initContainer:
+        condition: service_completed_successfully
+
+volumes:
+    app_data:
+
+networks:
+  network:
