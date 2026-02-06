@@ -1,10 +1,13 @@
 services:
   app:
     image: containrrr/watchtower
+    container_name: watchtower
+    restart: unless-stopped
+    labels:
+      - glance.name=Watchtower
+      - glance.icon=si:watchtower
+      - glance.description=Docker Image Updater
+      - glance.category=default
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-    networks:
-      - network
-
-networks:
-  network:
+      - /etc/localtime:/etc/localtime:ro
