@@ -6,8 +6,8 @@ services:
     ports:
       - 8090:8090
     volumes:
-      - app_data:/beszel_data
-      - app_socket:/beszel_socket
+      - data:/beszel_data
+      - socket:/beszel_socket
     environment:
       APP_URL: http://${SERVER-IP}:8090
     healthcheck:
@@ -30,7 +30,7 @@ services:
     network_mode: host
     volumes:
       - agent_data:/var/lib/beszel-agent
-      - app_socket:/beszel_socket
+      - socket:/beszel_socket
       - /var/run/docker.sock:/var/run/docker.sock:ro
     environment:
       LISTEN: 45876
@@ -58,6 +58,6 @@ networks:
     name: beszel_network
 
 volumes:
-    app_data:
-    app_socket:
+    data:
+    socket:
     agent_data:
