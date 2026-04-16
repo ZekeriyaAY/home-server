@@ -1,7 +1,7 @@
 services:
   homeassistant:
-    container_name: homeassistant
     image: ghcr.io/home-assistant/home-assistant:stable
+    container_name: homeassistant
     restart: unless-stopped
     network_mode: host
     volumes:
@@ -13,26 +13,10 @@ services:
     privileged: true
     labels:
       - glance.name=Home Assistant
-      - glance.icon=si:homeassistant
-      - glance.url=http://${SERVER-IP}:8123
       - glance.description=Home Automation
-      - glance.id=homeassistant
-      - glance.category=default
-
-  esphome:
-    container_name: esphome
-    image: esphome/esphome
-    volumes:
-      - esphome_config:/config
-      - /etc/localtime:/etc/localtime:ro
-    restart: no
-    privileged: true
-    network_mode: host
-    labels:
-      - glance.name=ESPHome
-      - glance.parent=homeassistant
+      - glance.url=http://${SERVER-IP}:8123
+      - glance.icon=si:homeassistant
       - glance.category=default
 
 volumes:
     config:
-    esphome_config:
