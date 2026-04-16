@@ -5,7 +5,7 @@ services:
     restart: unless-stopped
     network_mode: host
     volumes:
-      - config:/config
+      - data:/config
       - /var/run/dbus:/run/dbus:ro
       - /etc/localtime:/etc/localtime:ro
     environment:
@@ -19,4 +19,4 @@ services:
       - glance.category=default
 
 volumes:
-    config:
+    data:
