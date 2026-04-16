@@ -150,8 +150,8 @@ services:
       - PUID=1000
       - PGID=1000
       - TZ=Europe/Istanbul
-      - USER=${TRANSMISSION_USER:-admin}
-      - PASS=${TRANSMISSION_PASSWD:-admin}
+      - USER=${TRANSMISSION_USER}
+      - PASS=${TRANSMISSION_PASSWD}
     labels:
       - glance.name=Transmission
       - glance.description=Torrent Client & VPN
