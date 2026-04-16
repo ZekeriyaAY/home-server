@@ -3,7 +3,7 @@ services:
     image: busybox:stable
     container_name: n8n-init
     volumes:
-      - app_data:/home/node/.n8n
+      - data:/home/node/.n8n
     command: ['sh', '-c', 'chown -R 1000:1000 /home/node/.n8n']
     labels:
       - glance.name=N8N Init
@@ -21,7 +21,7 @@ services:
     ports:
       - 5678:5678
     volumes:
-      - app_data:/home/node/.n8n
+      - data:/home/node/.n8n
     environment:
       - N8N_ENFORCE_SETTINGS_FILE_PERMISSIONS=true
       # - N8N_HOST=${SUBDOMAIN}.${DOMAIN_NAME}
@@ -46,4 +46,4 @@ networks:
     name: n8n_network
 
 volumes:
-    app_data:
+    data:
