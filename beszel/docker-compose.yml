@@ -18,7 +18,7 @@ services:
     labels:
       - glance.name=Beszel
       - glance.description=Server Monitoring Hub
-      - glance.url=http://${SERVER-IP}:8090
+      - glance.url=http://${SERVER_IP}:8090
       - glance.icon=sh:beszel-light
       - glance.category=default
       - glance.id=beszel
