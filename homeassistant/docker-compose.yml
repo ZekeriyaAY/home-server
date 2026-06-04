@@ -14,6 +14,6 @@ services:
     labels:
       - glance.name=Home Assistant
       - glance.description=Home Automation
-      - glance.url=http://${SERVER-IP}:8123
+      - glance.url=http://${SERVER_IP}:8123
       - glance.icon=si:homeassistant
       - glance.category=default
