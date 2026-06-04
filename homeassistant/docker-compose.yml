@@ -5,7 +5,7 @@ services:
     restart: unless-stopped
     network_mode: host
     volumes:
-      - data:/config
+      - /opt/appdata/homeassistant:/config
       - /var/run/dbus:/run/dbus:ro
       - /etc/localtime:/etc/localtime:ro
     environment:
@@ -17,6 +17,3 @@ services:
       - glance.url=http://${SERVER-IP}:8123
       - glance.icon=si:homeassistant
       - glance.category=default
-
-volumes:
-    data:
