@@ -11,7 +11,7 @@ services:
     labels:
       - glance.name=Glance
       - glance.description=Dashboard
-      - glance.url=http://${SERVER-IP}:80
+      - glance.url=http://${SERVER_IP}:80
       - glance.icon=di:glance
       - glance.category=default
       - glance.id=glance
@@ -24,7 +24,7 @@ services:
       - 9092:8080
     labels:
       - glance.name=Glance Transmission
-      - glance.url=http://${SERVER-IP}:9092
+      - glance.url=http://${SERVER_IP}:9092
       - glance.category=default
       - glance.parent=glance
 
