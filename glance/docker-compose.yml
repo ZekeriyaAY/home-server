@@ -6,7 +6,7 @@ services:
     ports:
       - 80:8080
     volumes:
-      - data:/app/config
+      - /opt/appdata/glance:/app/config
       - /var/run/docker.sock:/var/run/docker.sock:ro
     labels:
       - glance.name=Glance
@@ -31,6 +31,3 @@ services:
 networks:
   default:
     name: glance_network
-
-volumes:
-    data:
