@@ -1,0 +1,28 @@
+services:
+  hermes:
+    image: nousresearch/hermes-agent:latest
+    container_name: hermes
+    restart: unless-stopped
+    ports:
+      - "8642:8642"   # gateway API
+      - "9119:9119"   # dashboard (only reached when HERMES_DASHBOARD=1)
+    volumes:
+      - /opt/appdata/hermes:/opt/data
+    environment:
+      - HERMES_DASHBOARD=1
+    command: gateway run
+    deploy:
+      resources:
+        limits:
+          memory: 8G
+          cpus: "6.0"
+    labels:
+      - glance.name=Hermes
+      - glance.description=AI agent
+      - glance.url=http://${SERVER_IP}:9119
+      - glance.icon=di:hermes-icon
+      - glance.category=default
+
+networks:
+  default:
+    name: hermes_network
