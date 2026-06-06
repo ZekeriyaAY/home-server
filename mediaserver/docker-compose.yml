@@ -5,10 +5,12 @@ services:
     restart: unless-stopped
     ports:
       - 8096:8096
+    devices:
+      - /dev/dri:/dev/dri
     volumes:
-      - /opt/mediaserver/config/jellyfin:/config
-      - /opt/mediaserver/cache/jellyfin:/cache
-      - /opt/mediaserver/data/media:/data/media
+      - /opt/appdata/mediaserver/config/jellyfin:/config
+      - /opt/appdata/mediaserver/cache/jellyfin:/cache
+      - /opt/appdata/mediaserver/data/media:/data/media
     environment:
       - PUID=1000
       - PGID=1000
@@ -16,7 +18,7 @@ services:
     labels:
       - glance.name=Jellyfin
       - glance.description=Media Player
-      - glance.url=http://${SERVER-IP}:8096
+      - glance.url=http://${SERVER_IP}:8096
       - glance.icon=si:jellyfin
       - glance.category=media
 
@@ -27,8 +29,8 @@ services:
     ports:
       - 8989:8989
     volumes:
-      - /opt/mediaserver/config/sonarr:/config
-      - /opt/mediaserver/data:/data
+      - /opt/appdata/mediaserver/config/sonarr:/config
+      - /opt/appdata/mediaserver/data:/data
     environment:
       - PUID=1000
       - PGID=1000
@@ -36,7 +38,7 @@ services:
     labels:
       - glance.name=Sonarr
       - glance.description=TV Shows Organizer/Manager
-      - glance.url=http://${SERVER-IP}:8989
+      - glance.url=http://${SERVER_IP}:8989
       - glance.icon=si:sonarr
       - glance.category=media
 
@@ -47,8 +49,8 @@ services:
     ports:
       - 7878:7878
     volumes:
-      - /opt/mediaserver/config/radarr:/config
-      - /opt/mediaserver/data:/data
+      - /opt/appdata/mediaserver/config/radarr:/config
+      - /opt/appdata/mediaserver/data:/data
     environment:
       - PUID=1000
       - PGID=1000
@@ -56,7 +58,7 @@ services:
     labels:
       - glance.name=Radarr
       - glance.description=Movie Organizer/Manager
-      - glance.url=http://${SERVER-IP}:7878
+      - glance.url=http://${SERVER_IP}:7878
       - glance.icon=si:radarr
       - glance.category=media
 
@@ -67,8 +69,8 @@ services:
     ports:
       - 6767:6767
     volumes:
-      - /opt/mediaserver/config/bazarr:/config
-      - /opt/mediaserver/data/media:/data/media
+      - /opt/appdata/mediaserver/config/bazarr:/config
+      - /opt/appdata/mediaserver/data/media:/data/media
     environment:
       - PUID=1000
       - PGID=1000
@@ -76,7 +78,7 @@ services:
     labels:
       - glance.name=Bazarr
       - glance.description=Subtitle Manager
-      - glance.url=http://${SERVER-IP}:6767
+      - glance.url=http://${SERVER_IP}:6767
       - glance.icon=sh:bazarr-light
       - glance.category=media
 
@@ -87,7 +89,7 @@ services:
     ports:
       - 9696:9696
     volumes:
-      - /opt/mediaserver/config/prowlarr:/config
+      - /opt/appdata/mediaserver/config/prowlarr:/config
     environment:
       - PUID=1000
       - PGID=1000
@@ -95,7 +97,7 @@ services:
     labels:
       - glance.name=Prowlarr
       - glance.description=Indexer Manager
-      - glance.url=http://${SERVER-IP}:9696
+      - glance.url=http://${SERVER_IP}:9696
       - glance.icon=sh:prowlarr-light
       - glance.category=media
 
@@ -144,8 +146,8 @@ services:
     #   - 51413:51413
     #   - 51413:51413/udp
     volumes:
-      - /opt/mediaserver/config/transmission:/config
-      - /opt/mediaserver/data/torrents:/data/torrents
+      - /opt/appdata/mediaserver/config/transmission:/config
+      - /opt/appdata/mediaserver/data/torrents:/data/torrents
     environment:
       - PUID=1000
       - PGID=1000
@@ -155,7 +157,7 @@ services:
     labels:
       - glance.name=Transmission
       - glance.description=Torrent Client & VPN
-      - glance.url=http://${SERVER-IP}:9091
+      - glance.url=http://${SERVER_IP}:9091
       - glance.icon=si:transmission
       - glance.category=media
       - glance.id=transmission
