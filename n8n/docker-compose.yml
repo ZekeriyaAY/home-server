@@ -3,7 +3,7 @@ services:
     image: busybox:stable
     container_name: n8n-init
     volumes:
-      - data:/home/node/.n8n
+      - /opt/appdata/n8n:/home/node/.n8n
     command: ['sh', '-c', 'chown -R 1000:1000 /home/node/.n8n']
     labels:
       - glance.name=N8N Init
@@ -21,7 +21,7 @@ services:
     ports:
       - 5678:5678
     volumes:
-      - data:/home/node/.n8n
+      - /opt/appdata/n8n:/home/node/.n8n
     environment:
       - N8N_ENFORCE_SETTINGS_FILE_PERMISSIONS=true
       # - N8N_HOST=${SUBDOMAIN}.${DOMAIN_NAME}
@@ -36,27 +36,23 @@ services:
     labels:
       - glance.name=N8N
       - glance.description=AI Workflow Automation
-      - glance.url=https://{SUBDOMAIN}.${DOMAIN_NAME}
+      - glance.url=https://${SUBDOMAIN}.${DOMAIN_NAME}
       - glance.icon=si:n8n
       - glance.category=default
       - glance.id=n8n
 
   cloudflare-tunnel:
     image: cloudflare/cloudflared:latest
-    container_name: cloudflare-tunnel
+    container_name: n8n-cloudflare-tunnel
     restart: unless-stopped
     environment:
       - TUNNEL_TOKEN=${CLOUDFLARE_TUNNEL_TOKEN}
     command: tunnel --no-autoupdate run
     labels:
       - glance.name=Cloudflare Tunnel
-      - glance.description=Secure Tunnel
-      - glance.icon=si:cloudflare
+      - glance.parent=n8n
       - glance.category=default
 
 networks:
   default:
     name: n8n_network
-
-volumes:
-    data:
