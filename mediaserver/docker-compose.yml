@@ -10,7 +10,7 @@ services:
     volumes:
       - /opt/appdata/mediaserver/config/jellyfin:/config
       - /opt/appdata/mediaserver/cache/jellyfin:/cache
-      - /opt/appdata/mediaserver/data/media:/data/media
+      - /mnt/storage/media:/data/media
     environment:
       - PUID=1000
       - PGID=1000
@@ -30,7 +30,7 @@ services:
       - 8989:8989
     volumes:
       - /opt/appdata/mediaserver/config/sonarr:/config
-      - /opt/appdata/mediaserver/data:/data
+      - /mnt/storage:/data
     environment:
       - PUID=1000
       - PGID=1000
@@ -50,7 +50,7 @@ services:
       - 7878:7878
     volumes:
       - /opt/appdata/mediaserver/config/radarr:/config
-      - /opt/appdata/mediaserver/data:/data
+      - /mnt/storage:/data
     environment:
       - PUID=1000
       - PGID=1000
@@ -70,7 +70,7 @@ services:
       - 6767:6767
     volumes:
       - /opt/appdata/mediaserver/config/bazarr:/config
-      - /opt/appdata/mediaserver/data/media:/data/media
+      - /mnt/storage/media:/data/media
     environment:
       - PUID=1000
       - PGID=1000
@@ -147,7 +147,8 @@ services:
     #   - 51413:51413/udp
     volumes:
       - /opt/appdata/mediaserver/config/transmission:/config
-      - /opt/appdata/mediaserver/data/torrents:/data/torrents
+      - /opt/appdata/mediaserver/data/torrents/incomplete:/data/torrents/incomplete
+      - /mnt/storage/torrents/complete:/data/torrents/complete
     environment:
       - PUID=1000
       - PGID=1000
