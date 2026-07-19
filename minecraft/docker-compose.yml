@@ -1,0 +1,69 @@
+services:
+  minecraft:
+    image: itzg/minecraft-server:latest
+    container_name: minecraft-server
+    restart: unless-stopped
+    pull_policy: daily
+    tty: true
+    stdin_open: true
+    ports:
+      - "127.0.0.1:25565:25565"
+      - "127.0.0.1:19132:19132/udp"
+    volumes:
+      - /opt/appdata/minecraft/data:/data
+    environment:
+      EULA: "TRUE"
+      TYPE: "FABRIC"
+      VERSION: "LATEST"
+      MEMORY: "4G"
+      DIFFICULTY: "hard"
+      MAX_PLAYERS: "4"
+      TZ: "Europe/Istanbul"
+      MOTD: "Minecraft Server Var Ustamm!"
+      LOG_TIMESTAMP: "true"
+      MODS: |
+        https://download.geysermc.org/v2/projects/geyser/versions/latest/builds/latest/downloads/fabric
+      MODRINTH_PROJECTS: |
+        fabric-api
+        fallingtree
+    labels:
+      - glance.name=Minecraft
+      - glance.description=Minecraft Server
+      - glance.url=https://playit.gg
+      - glance.icon=sh:minecraft-light
+      - glance.category=default
+      - glance.id=minecraft
+
+  backup:
+    image: itzg/mc-backup:latest
+    container_name: minecraft-backup
+    restart: unless-stopped
+    depends_on:
+      - minecraft
+    volumes:
+      - /opt/appdata/minecraft/data:/data:ro
+      - /opt/appdata/minecraft/backups:/backups
+    environment:
+      RCON_HOST: minecraft
+      BACKUP_INTERVAL: "6h"
+      PRUNE_BACKUPS_DAYS: "7"
+    labels:
+      - glance.name=Backup
+      - glance.category=default
+      - glance.parent=minecraft
+
+  playit:
+    image: ghcr.io/playit-cloud/playit-agent:0.17
+    container_name: minecraft-playit
+    restart: unless-stopped
+    network_mode: host
+    environment:
+    - SECRET_KEY=${PLAYIT_SECRET_KEY}
+    labels:
+      - glance.name=Playit
+      - glance.category=default
+      - glance.parent=minecraft
+
+networks:
+  default:
+    name: minecraft_network
