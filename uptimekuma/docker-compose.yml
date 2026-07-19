@@ -1,17 +1,20 @@
 services:
-  app:
-    image: louislam/uptime-kuma:1
-    restart: always
+  uptime-kuma:
+    image: louislam/uptime-kuma:2
+    container_name: uptime-kuma
+    restart: unless-stopped
+    ports:
+      - "3001:3001"
     volumes:
-      - data:/app/data
-      - /var/run/docker.sock:/var/run/docker.sock
-    # ports:
-      # - 3001:3001
-    networks:
-      - network
+      - /opt/appdata/uptimekuma/data:/app/data
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    labels:
+      - glance.name=Uptime Kuma
+      - glance.description=Uptime Monitoring Tool
+      - glance.url=http://${SERVER_IP}:3001
+      - glance.icon=si:uptimekuma
+      - glance.category=default
 
-volumes:
-  data:
-  
 networks:
-  network:
+  default:
+    name: uptimekuma_network
