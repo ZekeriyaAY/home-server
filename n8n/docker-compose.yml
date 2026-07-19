@@ -19,7 +19,7 @@ services:
         condition: service_completed_successfully
     restart: unless-stopped
     ports:
-      - 5678:5678
+      - "127.0.0.1:5678:5678"
     volumes:
       - /opt/appdata/n8n:/home/node/.n8n
     environment:
