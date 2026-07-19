@@ -12,7 +12,7 @@ services:
       - glance.name=Glance
       - glance.description=Dashboard
       - glance.url=http://${SERVER_IP}:80
-      - glance.icon=di:glance
+      - glance.icon=si:glance
       - glance.category=default
       - glance.id=glance
 
@@ -20,8 +20,11 @@ services:
     image: ghcr.io/xtrems876/glance-transmission:latest
     container_name: glance-transmission
     restart: unless-stopped
-    ports:
-      - 9092:8080
+    networks:
+      - default
+      - media_network
+    # ports:
+    #   - 9092:8080
     labels:
       - glance.name=Glance Transmission
       - glance.url=http://${SERVER_IP}:9092
@@ -31,3 +34,5 @@ services:
 networks:
   default:
     name: glance_network
+  media_network:
+    external: true
