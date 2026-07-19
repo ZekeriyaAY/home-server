@@ -1,0 +1,23 @@
+services:
+  tailscale:
+    image: tailscale/tailscale:latest
+    container_name: tailscale
+    hostname: tailscale-homeserver
+    restart: unless-stopped
+    network_mode: host
+    volumes:
+      - /opt/appdata/tailscale:/var/lib/tailscale
+    environment:
+      - TS_AUTHKEY=${AUTH_KEY}
+      - TS_STATE_DIR=/var/lib/tailscale
+      - TS_USERSPACE=false
+    cap_add:
+      - NET_ADMIN
+      - NET_RAW
+    devices:
+      - /dev/net/tun:/dev/net/tun
+    labels:
+      - glance.name=Tailscale
+      - glance.description=Private WireGuard Networks
+      - glance.icon=si:tailscale
+      - glance.category=default
