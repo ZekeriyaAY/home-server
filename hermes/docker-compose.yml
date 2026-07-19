@@ -10,6 +10,7 @@ services:
       - /opt/appdata/hermes:/opt/data
     environment:
       - HERMES_DASHBOARD=1
+      - HERMES_DASHBOARD_INSECURE=1
     command: gateway run
     deploy:
       resources:
