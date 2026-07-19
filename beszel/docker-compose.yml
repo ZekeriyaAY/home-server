@@ -32,6 +32,7 @@ services:
       - /opt/appdata/beszel-agent:/var/lib/beszel-agent
       - /opt/appdata/beszel-socket:/beszel_socket
       - /var/run/docker.sock:/var/run/docker.sock:ro
+      - /mnt/storage/.beszel:/extra-filesystems/sdb__Media:ro
     environment:
       LISTEN: /beszel_socket/beszel.sock
       KEY: '${KEY}'
