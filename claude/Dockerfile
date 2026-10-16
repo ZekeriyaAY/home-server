@@ -8,7 +8,10 @@ RUN useradd -m -u 1000 -s /bin/bash claude
 
 USER claude
 WORKDIR /home/claude
-RUN curl -fsSL https://claude.ai/install.sh | bash
+RUN curl -fsSL https://claude.ai/install.sh -o /tmp/install.sh \
+    && bash /tmp/install.sh \
+    && rm /tmp/install.sh \
+    && ~/.local/bin/claude --version
 
 ENV PATH=/home/claude/.local/bin:$PATH \
     CLAUDE_CONFIG_DIR=/home/claude/.claude
