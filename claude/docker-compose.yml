@@ -1,0 +1,44 @@
+services:
+  claude-init:
+    image: busybox:stable
+    container_name: claude-init
+    volumes:
+      - /opt/appdata/claude:/data
+    command: ['sh', '-c', 'mkdir -p /data/config /data/workspace && chown 1000:1000 /data /data/config /data/workspace']
+    labels:
+      - glance.name=Claude Init
+      - glance.parent=claude
+      - glance.category=default
+      - glance.hide=true
+
+  claude:
+    image: ghcr.io/zekeriyaay/claude-code:latest
+    container_name: claude
+    depends_on:
+      claude-init:
+        condition: service_completed_successfully
+    restart: unless-stopped
+    tty: true
+    stdin_open: true
+    volumes:
+      - /opt/appdata/claude/config:/home/claude/.claude
+      - /opt/appdata/claude/workspace:/workspace
+    environment:
+      - TZ=Europe/Istanbul
+      - CLAUDE_REMOTE_CONTROL_SESSION_NAME_PREFIX=zHS
+    deploy:
+      resources:
+        limits:
+          memory: 4G
+          cpus: "4.0"
+    labels:
+      - com.centurylinklabs.watchtower.enable=false
+      - glance.name=Claude Code
+      - glance.description=Claude Code (Remote Control)
+      - glance.icon=si:claude
+      - glance.category=default
+      - glance.id=claude
+
+networks:
+  default:
+    name: claude_network
