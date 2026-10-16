@@ -8,6 +8,17 @@ services:
     volumes:
       - /opt/appdata/glance:/app/config
       - /var/run/docker.sock:/var/run/docker.sock:ro
+    environment:
+      - UPTIME_KUMA_URL=http://${SERVER_IP}:3001
+      - UPTIME_KUMA_STATUS_SLUG=${UPTIME_KUMA_STATUS_SLUG}
+      - MC_SERVER_URL=${MC_SERVER_URL}
+      - TRANSMISSION_USER=${TRANSMISSION_USER}
+      - TRANSMISSION_PASSWORD=${TRANSMISSION_PASSWD}
+      - TRANSMISSION_URL=${TRANSMISSION_URL}
+      - GLANCE_TRANSMISSION_URL=${GLANCE_TRANSMISSION_URL}
+      - BESZEL_URL=http://${SERVER_IP}:8090
+      - BESZEL_EMAIL=${BESZEL_EMAIL}
+      - BESZEL_PASSWORD=${BESZEL_PASSWORD}
     labels:
       - glance.name=Glance
       - glance.description=Dashboard
