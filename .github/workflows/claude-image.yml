@@ -1,0 +1,32 @@
+name: Claude image
+
+on:
+  push:
+    branches: [master]
+    paths:
+      - claude/Dockerfile
+      - claude/entrypoint.sh
+      - .github/workflows/claude-image.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  packages: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - uses: docker/build-push-action@v6
+        with:
+          context: claude
+          push: true
+          tags: ghcr.io/zekeriyaay/claude-code:latest
