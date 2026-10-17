@@ -7,8 +7,24 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
       - /etc/localtime:/etc/localtime:ro
     environment:
-      DOCKER_API_VERSION: "1.54" # docker version --format '{{.Server.APIVersion}}'
+      DOCKER_API_VERSION: "1.54"
       WATCHTOWER_CLEANUP: true
+      WATCHTOWER_NOTIFICATION_URL: ${WATCHTOWER_NOTIFICATION_URL}
+      WATCHTOWER_NOTIFICATIONS_HOSTNAME: homeserver
+      WATCHTOWER_NO_STARTUP_MESSAGE: true
+      WATCHTOWER_NOTIFICATION_REPORT: true
+      WATCHTOWER_NOTIFICATION_TEMPLATE: |
+        {{- if .Report -}}{{- with .Report -}}
+        {{- if or .Updated .Failed -}}
+        {{len .Updated}} güncellendi, {{len .Failed}} başarısız
+        {{- range .Updated}}
+        ✅ {{.Name}} ({{.ImageName}})
+        {{- end}}
+        {{- range .Failed}}
+        ❌ {{.Name}}: {{.Error}}
+        {{- end}}
+        {{- end -}}
+        {{- end -}}{{- end -}}
     labels:
       - glance.name=Watchtower
       - glance.description=Docker Image Updater
