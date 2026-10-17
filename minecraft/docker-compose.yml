@@ -3,29 +3,39 @@ services:
     image: itzg/minecraft-server:latest
     container_name: minecraft-server
     restart: unless-stopped
-    pull_policy: daily
     tty: true
     stdin_open: true
     ports:
       - "127.0.0.1:25565:25565"
       - "127.0.0.1:19132:19132/udp"
+      - "24454:24454/udp"
     volumes:
       - /opt/appdata/minecraft/data:/data
     environment:
       EULA: "TRUE"
+      ONLINE_MODE: "FALSE"
       TYPE: "FABRIC"
-      VERSION: "LATEST"
+      VERSION: "26.2"
       MEMORY: "4G"
       DIFFICULTY: "hard"
       MAX_PLAYERS: "4"
       TZ: "Europe/Istanbul"
-      MOTD: "Minecraft Server Var Ustamm!"
+      MOTD: "⛏️ Minecraft Server ⚔️\n§eHızlı koşan atın boku seyrek düşer"
       LOG_TIMESTAMP: "true"
-      MODS: |
-        https://download.geysermc.org/v2/projects/geyser/versions/latest/builds/latest/downloads/fabric
       MODRINTH_PROJECTS: |
         fabric-api
+        geyser:beta
         fallingtree
+        sgtveinminer
+        ping-wheel
+        jei:beta
+        armor-stand-arms
+        tool-trims:beta
+        floodgate
+        simple-voice-chat
+        anti-xray
+      RCON_CMDS_STARTUP: |-
+        gamerule minecraft:players_sleeping_percentage 0
     labels:
       - glance.name=Minecraft
       - glance.description=Minecraft Server
