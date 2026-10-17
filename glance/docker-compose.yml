@@ -3,44 +3,42 @@ services:
     image: glanceapp/glance:latest
     container_name: glance
     restart: unless-stopped
+    networks:
+      - default
+      - media_network
     ports:
       - 80:8080
     volumes:
       - /opt/appdata/glance:/app/config
       - /var/run/docker.sock:/var/run/docker.sock:ro
+      - /etc/localtime:/etc/localtime:ro
     environment:
+      - PORTAINER_URL=https://${SERVER_IP}:9443
       - UPTIME_KUMA_URL=http://${SERVER_IP}:3001
       - UPTIME_KUMA_STATUS_SLUG=${UPTIME_KUMA_STATUS_SLUG}
       - MC_SERVER_URL=${MC_SERVER_URL}
       - TRANSMISSION_USER=${TRANSMISSION_USER}
       - TRANSMISSION_PASSWORD=${TRANSMISSION_PASSWD}
       - TRANSMISSION_URL=${TRANSMISSION_URL}
-      - GLANCE_TRANSMISSION_URL=${GLANCE_TRANSMISSION_URL}
       - BESZEL_URL=http://${SERVER_IP}:8090
       - BESZEL_EMAIL=${BESZEL_EMAIL}
       - BESZEL_PASSWORD=${BESZEL_PASSWORD}
+      - TAILSCALE_CLIENT_ID=${TAILSCALE_CLIENT_ID}
+      - TAILSCALE_CLIENT_SECRET=${TAILSCALE_CLIENT_SECRET}
+      - GLUETUN_URL=${GLUETUN_CONTAINER_NAME}:8000
+      - GLUETUN_API_KEY=${GLUETUN_API_KEY}
+      - JELLYFIN_URL=http://${SERVER_IP}:8096
+      - JELLYFIN_KEY=${JELLYFIN_KEY}
+      - SONARR_URL=http://${SERVER_IP}:8989
+      - SONARR_KEY=${SONARR_KEY}
+      - RADARR_URL=http://${SERVER_IP}:7878
+      - RADARR_KEY=${RADARR_KEY}
     labels:
       - glance.name=Glance
       - glance.description=Dashboard
       - glance.url=http://${SERVER_IP}:80
       - glance.icon=si:glance
       - glance.category=default
-      - glance.id=glance
-
-  glance-transmission:
-    image: ghcr.io/xtrems876/glance-transmission:latest
-    container_name: glance-transmission
-    restart: unless-stopped
-    networks:
-      - default
-      - media_network
-    # ports:
-    #   - 9092:8080
-    labels:
-      - glance.name=Glance Transmission
-      - glance.url=http://${SERVER_IP}:9092
-      - glance.category=default
-      - glance.parent=glance
 
 networks:
   default:
