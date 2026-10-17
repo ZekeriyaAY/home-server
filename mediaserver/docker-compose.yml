@@ -117,6 +117,8 @@ services:
     restart: unless-stopped
     ports:
       - 9091:9091
+    volumes:
+      - /opt/appdata/mediaserver/config/gluetun/auth/config.toml:/gluetun/auth/config.toml:ro
     environment:
       - VPN_SERVICE_PROVIDER=windscribe
       - VPN_TYPE=wireguard
