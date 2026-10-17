@@ -1,0 +1,142 @@
+x-dawarich-env: &dawarich-env
+  RAILS_ENV: production
+  REDIS_URL: redis://dawarich_redis:6379
+  DATABASE_HOST: dawarich_db
+  DATABASE_PORT: 5432
+  DATABASE_USERNAME: postgres
+  DATABASE_PASSWORD: ${POSTGRES_PASSWORD}
+  DATABASE_NAME: dawarich
+  APPLICATION_HOSTS: ${APPLICATION_HOSTS}
+  APPLICATION_PROTOCOL: http
+  TIME_ZONE: Europe/Istanbul
+  SECRET_KEY_BASE: ${SECRET_KEY_BASE}
+  RAILS_LOG_TO_STDOUT: "true"
+  SELF_HOSTED: "true"
+  STORE_GEODATA: "true"
+  PROMETHEUS_EXPORTER_ENABLED: "false"
+
+services:
+  dawarich_redis:
+    image: redis:7.4-alpine
+    container_name: dawarich_redis
+    restart: unless-stopped
+    command: redis-server --save 900 1 --save 300 10 --appendonly no
+    volumes:
+      - /opt/appdata/dawarich/shared:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "--raw", "incr", "ping"]
+      interval: 10s
+      retries: 5
+      start_period: 30s
+      timeout: 10s
+    labels:
+      - glance.name=Redis
+      - glance.category=default
+      - glance.parent=dawarich
+
+  dawarich_db:
+    image: postgis/postgis:17-3.5-alpine
+    container_name: dawarich_db
+    restart: unless-stopped
+    shm_size: 1G
+    volumes:
+      - /opt/appdata/dawarich/db:/var/lib/postgresql/data
+      - /opt/appdata/dawarich/shared:/var/shared
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: dawarich
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d dawarich"]
+      interval: 10s
+      retries: 5
+      start_period: 30s
+      timeout: 10s
+    labels:
+      - glance.name=PostGIS
+      - glance.category=default
+      - glance.parent=dawarich
+
+  dawarich_app:
+    image: freikin/dawarich:latest
+    container_name: dawarich_app
+    restart: unless-stopped
+    stdin_open: true
+    tty: true
+    entrypoint: web-entrypoint.sh
+    command: ["bin/rails", "server", "-p", "3000", "-b", "::"]
+    ports:
+      - 3000:3000
+    volumes:
+      - /opt/appdata/dawarich/public:/var/app/public
+      - /opt/appdata/dawarich/watched:/var/app/tmp/imports/watched
+      - /opt/appdata/dawarich/storage:/var/app/storage
+      - /opt/appdata/dawarich/db:/dawarich_db_data
+    environment:
+      <<: *dawarich-env
+      WEB_CONCURRENCY: 1
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO - http://127.0.0.1:3000/api/v1/health | grep -q '\"status\"\\s*:\\s*\"ok\"'"]
+      interval: 10s
+      retries: 30
+      start_period: 30s
+      timeout: 10s
+    depends_on:
+      dawarich_db:
+        condition: service_healthy
+        restart: true
+      dawarich_redis:
+        condition: service_healthy
+        restart: true
+    deploy:
+      resources:
+        limits:
+          cpus: "1.0"
+          memory: 4G
+    labels:
+      - glance.name=Dawarich
+      - glance.description=Location History
+      - glance.url=http://${SERVER_IP}:3000
+      - glance.icon=sh:dawarich-light
+      - glance.category=default
+      - glance.id=dawarich
+
+  dawarich_sidekiq:
+    image: freikin/dawarich:latest
+    container_name: dawarich_sidekiq
+    restart: unless-stopped
+    stdin_open: true
+    tty: true
+    entrypoint: sidekiq-entrypoint.sh
+    command: ["sidekiq"]
+    volumes:
+      - /opt/appdata/dawarich/public:/var/app/public
+      - /opt/appdata/dawarich/watched:/var/app/tmp/imports/watched
+      - /opt/appdata/dawarich/storage:/var/app/storage
+    environment:
+      <<: *dawarich-env
+      BACKGROUND_PROCESSING_CONCURRENCY: 3
+    healthcheck:
+      test: ["CMD-SHELL", "pgrep -f sidekiq"]
+      interval: 10s
+      retries: 30
+      start_period: 30s
+      timeout: 10s
+    depends_on:
+      dawarich_db:
+        condition: service_healthy
+        restart: true
+      dawarich_redis:
+        condition: service_healthy
+        restart: true
+      dawarich_app:
+        condition: service_healthy
+        restart: true
+    labels:
+      - glance.name=Sidekiq
+      - glance.category=default
+      - glance.parent=dawarich
+
+networks:
+  default:
+    name: dawarich_network
