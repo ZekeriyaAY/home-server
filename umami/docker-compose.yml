@@ -1,0 +1,50 @@
+services:
+  umami:
+    image: ghcr.io/umami-software/umami:latest
+    container_name: umami
+    depends_on:
+      db:
+        condition: service_healthy
+    restart: always
+    init: true
+    ports:
+      - 3000:3000
+    environment:
+      DATABASE_URL: postgresql://umami:${DB_PASSWORD}@db:5432/umami
+      APP_SECRET: ${SECRET}
+    healthcheck:
+      test: ["CMD-SHELL", "curl http://localhost:3000/api/heartbeat"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    labels:
+      - glance.name=Umami
+      - glance.description=Analytics
+      - glance.url=http://${SERVER_IP}:3000
+      - glance.icon=si:umami
+      - glance.category=default
+      - glance.id=umami
+      
+  db:
+    image: postgres:15-alpine
+    container_name: database
+    restart: always
+    volumes:
+      - /opt/appdata/umami:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: umami
+      POSTGRES_USER: umami
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    labels:
+      - glance.name=Database
+      - glance.category=default
+      - glance.parent=umami
+
+networks:
+  default:
+    name: umami_network
