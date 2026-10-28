@@ -14,12 +14,14 @@ services:
   claude:
     image: ghcr.io/zekeriyaay/claude-code:latest
     container_name: claude
+    hostname: claude
     depends_on:
       claude-init:
         condition: service_completed_successfully
     restart: unless-stopped
     tty: true
     stdin_open: true
+    shm_size: 1gb
     volumes:
       - /opt/appdata/claude/config:/home/claude/.claude
       - /opt/appdata/claude/workspace:/workspace
