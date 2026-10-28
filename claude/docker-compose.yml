@@ -4,7 +4,7 @@ services:
     container_name: claude-init
     volumes:
       - /opt/appdata/claude:/data
-    command: ['sh', '-c', 'mkdir -p /data/config /data/workspace && chown 1000:1000 /data /data/config /data/workspace']
+    command: ['sh', '-c', 'mkdir -p /data/config /data/dotconfig /data/workspace && chown 1000:1000 /data /data/config /data/dotconfig /data/workspace']
     labels:
       - glance.name=Claude Init
       - glance.parent=claude
@@ -25,11 +25,11 @@ services:
     shm_size: 1gb
     volumes:
       - /opt/appdata/claude/config:/home/claude/.claude
+      - /opt/appdata/claude/dotconfig:/home/claude/.config
       - /opt/appdata/claude/workspace:/workspace
     environment:
       - TZ=Europe/Istanbul
       - CLAUDE_REMOTE_CONTROL_SESSION_NAME_PREFIX=zHS
-      - GIT_CONFIG_GLOBAL=/home/claude/.claude/gitconfig
     deploy:
       resources:
         limits:
