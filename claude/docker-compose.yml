@@ -21,6 +21,7 @@ services:
     restart: unless-stopped
     tty: true
     stdin_open: true
+    command: ['--capacity', '8', '--no-create-session-in-dir']
     shm_size: 1gb
     volumes:
       - /opt/appdata/claude/config:/home/claude/.claude
