@@ -28,6 +28,7 @@ services:
     environment:
       - TZ=Europe/Istanbul
       - CLAUDE_REMOTE_CONTROL_SESSION_NAME_PREFIX=zHS
+      - GIT_CONFIG_GLOBAL=/home/claude/.claude/gitconfig
     deploy:
       resources:
         limits:
