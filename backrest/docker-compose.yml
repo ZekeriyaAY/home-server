@@ -1,0 +1,31 @@
+services:
+  backrest:
+    image: ghcr.io/garethgeorge/backrest:latest
+    container_name: backrest
+    hostname: backrest
+    restart: unless-stopped
+    ports:
+      - 9898:9898
+    volumes:
+      - /opt/appdata/backrest/data:/data
+      - /opt/appdata/backrest/config:/config
+      - /opt/appdata/backrest/cache:/cache
+      - /opt/appdata/backrest/tmp:/tmp
+      # What to back up (read-only)
+      - /opt/appdata:/userdata/appdata:ro
+      - type: bind
+        source: /mnt/backup
+        target: /repos
+        bind:
+          propagation: rslave
+      - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      BACKREST_DATA: /data
+      BACKREST_CONFIG: /config/config.json
+      XDG_CACHE_HOME: /cache
+      TMPDIR: /tmp
+      TZ: Europe/Istanbul
+
+networks:
+  default:
+    name: backrest_network
