@@ -20,7 +20,7 @@ services:
       DIFFICULTY: "hard"
       MAX_PLAYERS: "4"
       TZ: "Europe/Istanbul"
-      MOTD: "⛏️ Minecraft Server ⚔️\n§eHızlı koşan atın boku seyrek düşer"
+      MOTD: "⛏️ ZAY Minecraft Server ⚔️\n§eHızlı koşan atın boku seyrek düşer"
       LOG_TIMESTAMP: "true"
       MODRINTH_PROJECTS: |
         fabric-api
@@ -36,13 +36,6 @@ services:
         anti-xray
       RCON_CMDS_STARTUP: |-
         gamerule minecraft:players_sleeping_percentage 0
-    labels:
-      - glance.name=Minecraft
-      - glance.description=Minecraft Server
-      - glance.url=https://playit.gg
-      - glance.icon=sh:minecraft-light
-      - glance.category=default
-      - glance.id=minecraft
 
   backup:
     image: itzg/mc-backup:latest
@@ -57,10 +50,6 @@ services:
       RCON_HOST: minecraft
       BACKUP_INTERVAL: "6h"
       PRUNE_BACKUPS_DAYS: "7"
-    labels:
-      - glance.name=Backup
-      - glance.category=default
-      - glance.parent=minecraft
 
   playit:
     image: ghcr.io/playit-cloud/playit-agent:0.17
@@ -69,10 +58,6 @@ services:
     network_mode: host
     environment:
     - SECRET_KEY=${PLAYIT_SECRET_KEY}
-    labels:
-      - glance.name=Playit
-      - glance.category=default
-      - glance.parent=minecraft
 
 networks:
   default:
