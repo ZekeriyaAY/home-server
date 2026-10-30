@@ -15,12 +15,6 @@ services:
       - PUID=1000
       - PGID=1000
       - TZ=Europe/Istanbul
-    labels:
-      - glance.name=Jellyfin
-      - glance.description=Media Player
-      - glance.url=http://${SERVER_IP}:8096
-      - glance.icon=si:jellyfin
-      - glance.category=media
 
   sonarr:
     image: lscr.io/linuxserver/sonarr:latest
@@ -35,12 +29,6 @@ services:
       - PUID=1000
       - PGID=1000
       - TZ=Europe/Istanbul
-    labels:
-      - glance.name=Sonarr
-      - glance.description=TV Shows Organizer/Manager
-      - glance.url=http://${SERVER_IP}:8989
-      - glance.icon=si:sonarr
-      - glance.category=media
 
   radarr:
     image: lscr.io/linuxserver/radarr:latest
@@ -55,12 +43,6 @@ services:
       - PUID=1000
       - PGID=1000
       - TZ=Europe/Istanbul
-    labels:
-      - glance.name=Radarr
-      - glance.description=Movie Organizer/Manager
-      - glance.url=http://${SERVER_IP}:7878
-      - glance.icon=si:radarr
-      - glance.category=media
 
   bazarr:
     image: lscr.io/linuxserver/bazarr:latest
@@ -75,12 +57,6 @@ services:
       - PUID=1000
       - PGID=1000
       - TZ=Europe/Istanbul
-    labels:
-      - glance.name=Bazarr
-      - glance.description=Subtitle Manager
-      - glance.url=http://${SERVER_IP}:6767
-      - glance.icon=sh:bazarr-light
-      - glance.category=media
 
   prowlarr:
     image: lscr.io/linuxserver/prowlarr:latest
@@ -94,22 +70,11 @@ services:
       - PUID=1000
       - PGID=1000
       - TZ=Europe/Istanbul
-    labels:
-      - glance.name=Prowlarr
-      - glance.description=Indexer Manager
-      - glance.url=http://${SERVER_IP}:9696
-      - glance.icon=sh:prowlarr-light
-      - glance.category=media
 
   byparr:
     image: ghcr.io/thephaseless/byparr:latest
     container_name: byparr
     restart: unless-stopped
-    labels:
-      - glance.name=Byparr
-      - glance.description=Cloudflare ByPass
-      - glance.icon=sh:byparr-light
-      - glance.category=media
 
   gluetun: 
     image: qmcgaw/gluetun:latest
@@ -130,10 +95,6 @@ services:
       - NET_ADMIN
     devices:
       - /dev/net/tun:/dev/net/tun
-    labels:
-      - glance.name=Gluetun
-      - glance.category=media
-      - glance.parent=transmission
       
   transmission:
     image: lscr.io/linuxserver/transmission:latest
@@ -157,13 +118,6 @@ services:
       - TZ=Europe/Istanbul
       - USER=${TRANSMISSION_USER}
       - PASS=${TRANSMISSION_PASSWD}
-    labels:
-      - glance.name=Transmission
-      - glance.description=Torrent Client & VPN
-      - glance.url=http://${SERVER_IP}:9091
-      - glance.icon=si:transmission
-      - glance.category=media
-      - glance.id=transmission
 
 networks:
   default:
