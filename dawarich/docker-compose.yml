@@ -29,10 +29,6 @@ services:
       retries: 5
       start_period: 30s
       timeout: 10s
-    labels:
-      - glance.name=Redis
-      - glance.category=default
-      - glance.parent=dawarich
 
   dawarich_db:
     image: postgis/postgis:17-3.5-alpine
@@ -52,10 +48,6 @@ services:
       retries: 5
       start_period: 30s
       timeout: 10s
-    labels:
-      - glance.name=PostGIS
-      - glance.category=default
-      - glance.parent=dawarich
 
   dawarich_app:
     image: freikin/dawarich:latest
@@ -93,13 +85,6 @@ services:
         limits:
           cpus: "1.0"
           memory: 4G
-    labels:
-      - glance.name=Dawarich
-      - glance.description=Location History
-      - glance.url=http://${SERVER_IP}:3000
-      - glance.icon=sh:dawarich-light
-      - glance.category=default
-      - glance.id=dawarich
 
   dawarich_sidekiq:
     image: freikin/dawarich:latest
@@ -132,10 +117,6 @@ services:
       dawarich_app:
         condition: service_healthy
         restart: true
-    labels:
-      - glance.name=Sidekiq
-      - glance.category=default
-      - glance.parent=dawarich
 
 networks:
   default:
