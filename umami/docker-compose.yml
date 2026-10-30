@@ -17,13 +17,6 @@ services:
       interval: 5s
       timeout: 5s
       retries: 5
-    labels:
-      - glance.name=Umami
-      - glance.description=Analytics
-      - glance.url=http://${SERVER_IP}:3000
-      - glance.icon=si:umami
-      - glance.category=default
-      - glance.id=umami
       
   db:
     image: postgres:15-alpine
@@ -40,10 +33,6 @@ services:
       interval: 5s
       timeout: 5s
       retries: 5
-    labels:
-      - glance.name=Database
-      - glance.category=default
-      - glance.parent=umami
 
 networks:
   default:
