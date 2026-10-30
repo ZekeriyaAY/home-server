@@ -5,12 +5,6 @@ services:
     restart: unless-stopped
     ports:
       - 8834:8834
-    labels:
-      - glance.name=Tenable Nessus
-      - glance.description=Vulnerability Scanner
-      - glance.url=https://${SERVER-IP}:8834
-      - glance.icon=di:tenable-dark
-      - glance.category=default
       
 networks:
   default:
