@@ -12,12 +12,6 @@ services:
     volumes:
       - /opt/appdata/uptimekuma/data:/app/data
       - /var/run/docker.sock:/var/run/docker.sock:ro
-    labels:
-      - glance.name=Uptime Kuma
-      - glance.description=Uptime Monitoring Tool
-      - glance.url=http://${SERVER_IP}:3001
-      - glance.icon=si:uptimekuma
-      - glance.category=default
 
 networks:
   default:
