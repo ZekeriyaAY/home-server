@@ -5,11 +5,6 @@ services:
     volumes:
       - /opt/appdata/claude:/data
     command: ['sh', '-c', 'mkdir -p /data/config /data/dotconfig /data/workspace && chown 1000:1000 /data /data/config /data/dotconfig /data/workspace']
-    labels:
-      - glance.name=Claude Init
-      - glance.parent=claude
-      - glance.category=default
-      - glance.hide=true
 
   claude:
     image: ghcr.io/zekeriyaay/claude-code:latest
@@ -37,11 +32,6 @@ services:
           cpus: "4.0"
     labels:
       - com.centurylinklabs.watchtower.enable=false
-      - glance.name=Claude Code
-      - glance.description=Claude Code (Remote Control)
-      - glance.icon=si:claude
-      - glance.category=default
-      - glance.id=claude
 
 networks:
   default:
