@@ -17,12 +17,6 @@ services:
         limits:
           memory: 8G
           cpus: "6.0"
-    labels:
-      - glance.name=Hermes
-      - glance.description=AI agent
-      - glance.url=http://${SERVER_IP}:9119
-      - glance.icon=di:hermes-icon
-      - glance.category=default
 
 networks:
   default:
