@@ -25,11 +25,6 @@ services:
         {{- end}}
         {{- end -}}
         {{- end -}}{{- end -}}
-    labels:
-      - glance.name=Watchtower
-      - glance.description=Docker Image Updater
-      - glance.icon=si:watchtower
-      - glance.category=default
 
 networks:
   default:
