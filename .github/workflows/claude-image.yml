@@ -6,6 +6,7 @@ on:
     paths:
       - claude/Dockerfile
       - claude/entrypoint.sh
+      - claude/idle-reaper.py
       - .github/workflows/claude-image.yml
   workflow_dispatch:
 
