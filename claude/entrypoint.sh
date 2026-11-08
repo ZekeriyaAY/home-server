@@ -4,7 +4,8 @@
 (while true; do sleep 3600; idle-reaper.py --max-idle-hours 24; done) &
 
 # Keep the Saka Su web session alive (it expires after 2h of inactivity).
-(while true; do sleep 3000; [ -f /workspace/sakasu/saka.js ] && node /workspace/sakasu/saka.js durum >> /workspace/sakasu/keepalive.log 2>&1; done) &
+# Refresh right at startup, then every 90 minutes.
+(while true; do [ -f /workspace/sakasu/saka.js ] && node /workspace/sakasu/saka.js durum >> /workspace/sakasu/keepalive.log 2>&1; sleep 5400; done) &
 
 # Retry with a delay instead of letting Docker restart in a tight loop
 # (e.g. before the first login or while Remote Control is unavailable).
