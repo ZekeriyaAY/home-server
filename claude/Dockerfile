@@ -7,7 +7,7 @@ ENV PLAYWRIGHT_BROWSERS_PATH=/opt/pw-browsers \
     NODE_PATH=/usr/local/lib/node_modules
 
 RUN apt-get update \
-    && apt-get install -y --no-install-recommends ca-certificates curl git python3 ripgrep tini nodejs npm \
+    && apt-get install -y --no-install-recommends ca-certificates curl ffmpeg git python3 ripgrep tini nodejs npm \
     && npm install -g playwright@${PLAYWRIGHT_VERSION} \
     && playwright install --with-deps chromium \
     && npm cache clean --force \
